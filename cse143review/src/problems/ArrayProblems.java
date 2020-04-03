@@ -14,8 +14,17 @@ public class ArrayProblems {
      * Always starts with '[' and ends with ']'; elements are separated by ',' and a space.
      */
     public static String toString(int[] array) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        StringBuilder re = new StringBuilder("[");
+        if (array.length != 0) {
+            for (int i = 0; i < array.length - 1; i++) {
+                re.append(array[i]).append(", ");
+            }
+            re.append(array[array.length - 1]).append("]");
+            return re.toString();
+        } else {
+            re.append("]");
+            return re.toString();
+        }
     }
 
     /**
@@ -23,15 +32,22 @@ public class ArrayProblems {
      * Does not modify the input array.
      */
     public static int[] reverse(int[] array) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        int[] re = new int[array.length];
+        for (int i = 0; !(i >= array.length); i++) {
+            re[i] = array[array.length - 1 - i];
+        }
+        return re;
     }
 
     /**
      * Rotates the values in the array to the right.
      */
     public static void rotateRight(int[] array) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        int l = array.length;
+        if (l != 0) {
+            int tep = array[l - 1];
+            System.arraycopy(array, 0, array, 1, l - 1);
+            array[0] = tep;
+        }
     }
 }

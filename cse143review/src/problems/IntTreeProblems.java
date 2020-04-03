@@ -28,16 +28,35 @@ public class IntTreeProblems {
      * (The root node is treated as having depth 1.)
      */
     public static int depthSum(IntTree tree) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        int n = 1;
+        return dephelper(tree.overallRoot, n);
+    }
+
+    private static int dephelper(IntTreeNode root, int n) {
+        if (root == null) {
+            return 0;
+        } else {
+            return n++ * root.data + dephelper(root.left, n) + dephelper(root.right, n);
+        }
     }
 
     /**
      * Removes all leaf nodes from the given tree.
      */
     public static void removeLeaves(IntTree tree) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        tree.overallRoot = remove(tree.overallRoot);
+    }
+
+    public static IntTreeNode remove(IntTreeNode root) {
+        if (root == null) {
+            return root;
+        } else if (root.left == null && root.right == null) {
+            root = null;
+        } else {
+            root.left = remove(root.left);
+            root.right = remove(root.right);
+        }
+        return root;
     }
 
     /**
@@ -45,7 +64,20 @@ public class IntTreeProblems {
      * (The resulting tree is still a BST.)
      */
     public static void trim(IntTree tree, int min, int max) {
-        // TODO replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        tree.overallRoot = trimhelper(tree.overallRoot, min, max);
+    }
+
+    public static IntTreeNode trimhelper(IntTreeNode root, int min, int max) {
+        if (root == null) {
+            return root;
+        } else if (root.data < min) {
+            root = trimhelper(root.right, min, max);
+        } else if (root.data > max) {
+            root = trimhelper(root.left, min, max);
+        } else {
+            root.left = trimhelper(root.left, min, max);
+            root.right = trimhelper(root.right, min, max);
+        }
+        return root;
     }
 }
