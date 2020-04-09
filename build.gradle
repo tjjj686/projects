@@ -50,7 +50,7 @@ ext.commonDependencies = [
         junitengine: [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'],
         junitreporting: [group:'org.junit.platform', name: 'junit-platform-reporting', version: '1.6.1'],
         assertj: [group: 'org.assertj', name: 'assertj-core', version: '3.15.0'],
-    gson: [group: 'com.google.code.gson', name: 'gson', version: '2.8.6'],
+        gson: [group: 'com.google.code.gson', name: 'gson', version: '2.8.6'],
 ]
 
 // Specify additional settings to apply to all projects (including subprojects).
@@ -88,6 +88,7 @@ allprojects {
     // subprojects or external libraries.
     // Gradle will automatically download these libraries from the repositories listed above.
     dependencies {
+        implementation rootProject
         // We use some convenience classes from a library provided by Princeton.
         implementation group: 'edu.princeton.cs', name: 'algs4', version: '1.0.4'
 
@@ -158,6 +159,10 @@ allprojects {
 // Our root project has some extra dependencies
 dependencies {
     implementation commonDependencies.junit, commonDependencies.assertj
+    // We use JFreeChart to help us draw plots and other visualizations.
+    implementation group: 'org.jfree', name: 'jfreechart', version: '1.5.0'
+    // We use JOL to help us extract the approximate size of Java objects
+    implementation group: 'org.openjdk.jol', name: 'jol-core', version: '0.9'
 }
 
 // This adds the task that adds the skeleton remote.
@@ -167,7 +172,7 @@ tasks.register('addSkeletonRemote') {
         !grgit.remote.list().any { it.name == 'skeleton' }
     }
     doLast {
-        grgit.remote.add(name: 'skeleton', url: 'git@gitlab.cs.washington.edu:cse373-20wi-students/skeleton.git')
+        grgit.remote.add(name: 'skeleton', url: 'git@gitlab.cs.washington.edu:cse373-20sp-students/skeleton.git')
     }
 }
 
