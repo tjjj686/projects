@@ -1,7 +1,4 @@
-# We use gradle.properties to configure the grader to run locally
-/gradle.properties
-# Default output file when running grader locally
-/autograder-results.json
+*.png
 
 # Created by https://www.gitignore.io/api/vim,java,macos,python,gradle,windows,eclipse,intellij+all
 # Edit at https://www.gitignore.io/?templates=vim,java,macos,python,gradle,windows,eclipse,intellij+all
