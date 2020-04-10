@@ -1,6 +1,7 @@
 package deques;
 
 import edu.washington.cse373.BaseTest;
+import org.assertj.core.api.AbstractIntegerAssert;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
@@ -203,18 +204,23 @@ public abstract class BaseDequeTests extends BaseTest {
     void confusingTest() {
         Deque<Integer> deque = createDeque();
         deque.addFirst(0);
+        //
+        checkInvariants(deque);
         assertThat(deque.get(0)).isEqualTo(0);
 
         deque.addLast(1);
         assertThat(deque.get(1)).isEqualTo(1);
-
+        //
+        checkInvariants(deque);
         deque.addFirst(-1);
+        //
+        checkInvariants(deque);
         deque.addLast(2);
         assertThat(deque.get(3)).isEqualTo(2);
-
         deque.addLast(3);
         deque.addLast(4);
-
+        //
+        checkInvariants(deque);
         // Test that removing and adding back is okay
         assertThat(deque.removeFirst()).isEqualTo(-1);
         deque.addFirst(-1);
@@ -224,6 +230,7 @@ public abstract class BaseDequeTests extends BaseTest {
         deque.addFirst(-2);
         deque.addFirst(-3);
 
+        checkInvariants(deque);
         // Test a tricky sequence of removes
         assertThat(deque.removeFirst()).isEqualTo(-3);
         assertThat(deque.removeLast()).isEqualTo(5);
@@ -236,4 +243,6 @@ public abstract class BaseDequeTests extends BaseTest {
         assertThat(actual).isEqualTo(1);
         checkInvariants(deque);
     }
+
+
 }
