@@ -16,7 +16,7 @@ public class ArrayDeque<T> extends AbstractDeque<T> {
     }
 
     private static int increment(int i, int length) {
-        if (i >= length - 1) {
+        if (i == length - 1) {
             return 0;
         } else {
             return i + 1;
@@ -112,7 +112,7 @@ public class ArrayDeque<T> extends AbstractDeque<T> {
         int i = increment(front, data.length);
         for (int newIndex = 0; newIndex < size; newIndex += 1) {
             newData[newIndex] = data[i];
-            i = increment(i, size);
+            i = increment(i, data.length);
         }
         front = newData.length - 1;
         back = size;
