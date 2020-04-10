@@ -10,7 +10,6 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
 
     public LinkedDeque() {
         size = 0;
-        // TODO: replace this with your code
         front = new Node(45, null, null);
         back = new Node(54, null, null);
         front.next = back;
@@ -19,7 +18,6 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
 
     public void addFirst(T item) {
         size += 1;
-        // TODO: replace this with your code
         if (size == 1) {
             Node add = new Node(item, null, front.next);
             front.next = add;
@@ -37,7 +35,6 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
 
     public void addLast(T item) {
         size += 1;
-        // TODO: replace this with your code
         if (size == 1) {
             Node add = new Node(item, null, front.next);
             front.next = add;
@@ -58,7 +55,6 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
             return null;
         }
         size -= 1;
-        // TODO: replace this with your code
         T num = front.next.value;
         front.next.next.prev = front;
         front.next = front.next.next;
@@ -80,13 +76,22 @@ public class LinkedDeque<T> extends AbstractDeque<T> {
         if ((index >= size) || (index < 0)) {
             return null;
         }
-        // TODO: replace this with your code
-        Node cur = front.next;
-        for (int i = 0; i < index; i++) {
-            cur = cur.next;
+        if (index > size / 2) {
+            int num = size - 1 - index;
+            Node temp = back;
+            for (int i = 0; i < num; i++) {
+                temp = temp.prev;
+            }
+            T re = (T) temp.prev.value;
+            return re;
+        } else {
+            Node cur = front.next;
+            for (int i = 0; i < index; i++) {
+                cur = cur.next;
+            }
+            T re = (T) cur.value;
+            return re;
         }
-        T re = (T) cur.value;
-        return re;
     }
 
     public int size() {

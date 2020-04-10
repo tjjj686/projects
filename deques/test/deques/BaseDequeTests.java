@@ -169,6 +169,7 @@ public abstract class BaseDequeTests extends BaseTest {
         checkInvariants(deque);
     }
 
+
     /* These tests check whether you can create Deques of different parameterized types. */
     @Test
     void remove_afterAddString_returnsCorrectString() {
