@@ -10,9 +10,9 @@ import java.util.NoSuchElementException;
  * @see Map
  */
 public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
-    private static double DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD = 2;
+    private static double DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD = 200;
     private static int DEFAULT_INITIAL_CHAIN_COUNT = 10;
-    private static int DEFAULT_INITIAL_CHAIN_CAPACITY = 10;
+    private static int DEFAULT_INITIAL_CHAIN_CAPACITY = 2;
     private static int num;
     /*
     Warning:
@@ -134,7 +134,7 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
             chainedHashMapt(2 * DEFAULT_INITIAL_CHAIN_COUNT);
             DEFAULT_INITIAL_CHAIN_COUNT *= 2;
             for (int j = 0; j < chainst.length; j++) {
-                chainst[j] = createChain(20);
+                chainst[j] = createChain(DEFAULT_INITIAL_CHAIN_CAPACITY);
             }
 
             for (AbstractIterableMap<K, V> bucket : chains) {
