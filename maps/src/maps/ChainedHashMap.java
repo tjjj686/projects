@@ -132,28 +132,20 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
         if (size() / chains.length >= DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD) {
             int x = 0;
             chainedHashMapt(2 * chains.length);
-            for (AbstractIterableMap<K, V> item : chains) {
-                if (item != null) {
-                    chainst[x] = item;
+
+            for (int j = 0; j < chainst.length; j++) {
+                chainst[j] = createChain(20);
+            }
+
+            for (AbstractIterableMap<K, V> bucket : chains) {
+                for (Entry<K, V> pair : bucket) {
+                    i = Math.abs(pair.getKey().hashCode()) % chainst.length;
+                    chainst[i].put(pair.getKey(), pair.getValue());
                 }
-                x++;
             }
             chains = chainst;
             i = 0;
-            for (AbstractIterableMap<K, V> item : chains) {
-                if (item == null && i == key.hashCode()) {
-                    chains[i] = new ArrayMap<>(DEFAULT_INITIAL_CHAIN_CAPACITY);
-                    chains[i].put(key, value);
-                    num++;
-                    return null;
-                }
-                if (item != null && i == key.hashCode()) {
-                    chains[i].put(key, value);
-                    num++;
-                    return null;
-                }
-                i++;
-            }
+            puthelper(key, value, i);
         }
         return null;
 
