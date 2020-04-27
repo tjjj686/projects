@@ -129,7 +129,7 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
             return puthelper(key, value, i);
         }
 
-        if (size() / chains.length >= DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD) {
+        if (size() / chains.length >= DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD - 1) {
             int x = 0;
             chainedHashMapt(2 * chains.length);
 
