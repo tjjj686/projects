@@ -106,7 +106,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
                 i++;
             }
         }
-        if (i >= entries.length) {
+        if (size() >= entries.length - 1) {
             int j = 0;
             arrayMapt(2 * entries.length);
             for (SimpleEntry<K, V> item : entries) {

@@ -1,3 +1,4 @@
+
 package maps;
 
 import java.util.Iterator;
@@ -9,8 +10,8 @@ import java.util.NoSuchElementException;
  * @see Map
  */
 public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
-    private static double DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD = 0.5;
-    private static int DEFAULT_INITIAL_CHAIN_COUNT = 1;
+    private static double DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD = 2;
+    private static int DEFAULT_INITIAL_CHAIN_COUNT = 10;
     private static int DEFAULT_INITIAL_CHAIN_CAPACITY = 10;
     private static int num;
     /*
@@ -95,12 +96,12 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
                 chains[i].put(key, value);
                 num++;
             }
-            if (key != null && item == null && i == Math.abs(key.hashCode()) % chains.length) {
+            if (key != null && item == null && i == Math.abs(key.hashCode()) % DEFAULT_INITIAL_CHAIN_COUNT) {
                 chains[i] = new ArrayMap<>(DEFAULT_INITIAL_CHAIN_CAPACITY);
                 chains[i].put(key, value);
                 num++;
             }
-            if (key != null && item != null && i == Math.abs(key.hashCode()) % chains.length) {
+            if (key != null && item != null && i == Math.abs(key.hashCode()) % DEFAULT_INITIAL_CHAIN_COUNT) {
                 chains[i].put(key, value);
                 num++;
             }
@@ -115,34 +116,39 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
 
     public V put(K key, V value) {
         int i = 0;
-        if (key != null) {
-            i = Math.abs(key.hashCode()) % chains.length;
-        }
-        int ori = chains[i].size();
-        V re = chains[i].put(key, value);
-        int aft = chains[i].size();
-        if (aft > ori) {
-            num++;
-            double ratio = num / chains.length;
-            if (ratio >= DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD) {
-                DEFAULT_INITIAL_CHAIN_COUNT *= 2;
-                chainedHashMapt(DEFAULT_INITIAL_CHAIN_COUNT);
-                for (int z = 0; z < DEFAULT_INITIAL_CHAIN_COUNT; z++) {
-                    chainst[z] = createChain(DEFAULT_INITIAL_CHAIN_CAPACITY);
-                }
-                for (AbstractIterableMap<K, V> cur : chains) {
-                    for (Entry<K, V> pair : cur) {
-                        int j = 0;
-                        if (key != null) {
-                            j = Math.abs(key.hashCode()) % chains.length;
-                        }
-                        chainst[j].put(pair.getKey(), pair.getValue());
-                    }
-                }
-                chains = chainst;
+        V re;
+        for (AbstractIterableMap<K, V> item : chains) {
+            if (item != null && item.containsKey(key)) {
+                re = item.get(key);
+                item.put(key, value);
+                i++;
+                return re;
             }
         }
-        return re;
+        if (i == 0 && size() / DEFAULT_INITIAL_CHAIN_COUNT < DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD) {
+            return puthelper(key, value, i);
+        }
+
+        if (size() / DEFAULT_INITIAL_CHAIN_COUNT >= DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD) {
+            int x = 0;
+            chainedHashMapt(2 * DEFAULT_INITIAL_CHAIN_COUNT);
+            DEFAULT_INITIAL_CHAIN_COUNT *= 2;
+            for (int j = 0; j < chainst.length; j++) {
+                chainst[j] = createChain(20);
+            }
+
+            for (AbstractIterableMap<K, V> bucket : chains) {
+                for (Entry<K, V> pair : bucket) {
+                    i = Math.abs(pair.getKey().hashCode()) % chainst.length;
+                    chainst[i].put(pair.getKey(), pair.getValue());
+                }
+            }
+            chains = chainst;
+            i = 0;
+            puthelper(key, value, i);
+        }
+        return null;
+
     }
 
     @Override
