@@ -11,11 +11,11 @@ import java.util.NoSuchElementException;
  */
 public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
     private static double DEFAULT_RESIZING_LOAD_FACTOR_THRESHOLD = 1;
-    private static int DEFAULT_INITIAL_CHAIN_COUNT = 10;
-    private static int DEFAULT_INITIAL_CHAIN_CAPACITY = 5;
+    private static int DEFAULT_INITIAL_CHAIN_COUNT = 5;
+    private static int DEFAULT_INITIAL_CHAIN_CAPACITY = 2;
     private static int capacity;
     private static double threshold;
-    private static int arraySize;
+    private static int arrayLength;
     private static int num;
     /*
     Warning:
@@ -44,11 +44,11 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
     public ChainedHashMap(double resizingLoadFactorThreshold, int initialChainCount, int chainInitialCapacity) {
         this.threshold = resizingLoadFactorThreshold;
         this.capacity = initialChainCount;
-        this.arraySize = chainInitialCapacity;
+        this.arrayLength = chainInitialCapacity;
         this.chains = this.createArrayOfChains(capacity);
         this.num = 0;
         for (int i = 0; i < chains.length; i++) {
-            chains[i] = createChain(arraySize);
+            chains[i] = createChain(arrayLength);
         }
     }
 
@@ -106,7 +106,7 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
         capacity *= 2;
         AbstractIterableMap<K, V>[] myMap = createArrayOfChains((capacity));
         for (int i = 0; i < capacity; i++) {
-            myMap[i] = createChain(arraySize);
+            myMap[i] = createChain(arrayLength);
         }
         for (AbstractIterableMap<K, V> cur : chains) {
             for (Entry<K, V> pair : cur) {
