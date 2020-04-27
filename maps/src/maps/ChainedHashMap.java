@@ -154,16 +154,12 @@ public class ChainedHashMap<K, V> extends AbstractIterableMap<K, V> {
     @Override
     public V remove(Object key) {
         V re = null;
-        int i = 0;
-        for (AbstractIterableMap<K, V> item : chains) {
-            if (item != null && item.containsKey(key)) {
-                re = item.remove(key);
-                num--;
-                return re;
-            }
-            i++;
+        int i = Math.abs(key.hashCode()) % chains.length;
+        re = chains[i].remove(key);
+        if (re != null) {
+            num--;
         }
-        return null;
+        return re;
     }
 
     @Override
