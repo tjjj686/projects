@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  */
 public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
-
+    int l;
     /*
     Warning:
     DO NOT rename this `entries` field or change its type.
@@ -38,6 +38,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
 
     public ArrayMap(int initialCapacity) {
         this.entries = this.createArrayOfEntries(initialCapacity);
+        this.l = 0;
     }
 
     /**
@@ -80,7 +81,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
         int i = 0;
         V re = null;
         for (SimpleEntry<K, V> item : entries) {
-            if (item != null && item.getKey().equals(key)) {
+            if (item != null && item.getKey() == null && key == null || item != null && item.getKey().equals(key)) {
                 re = item.getValue();
                 item.setValue(value);
                 i++;
@@ -91,6 +92,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
             for (SimpleEntry<K, V> item : entries) {
                 if (item == null) {
                     entries[i] = new SimpleEntry<K, V>(key, value);
+                    l++;
                     return null;
                 }
                 i++;
@@ -104,6 +106,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
             }
             entries = entries1;
             entries[j] = new SimpleEntry<>(key, value);
+            l++;
         }
         return null;
     }
@@ -112,29 +115,23 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     public V remove(Object key) {
         V re = null;
         int i = 0;
-        int j = 0;
-        int z = 0;
         for (SimpleEntry<K, V> item : entries) {
-            if (item != null && item.getKey().equals(key)) {
+            if (item != null && item.getKey() == null && key == null || item != null && item.getKey().equals(key)) {
                 re = item.getValue();
-                entries[i] = null;
-                j = i;
-                z++;
+                entries[i] = entries[size() - 1];
+                entries[size() - 1] = null;
+                l--;
+                return re;
             }
             i++;
-        }
-        if (z != 0) {
-            entries[j] = entries[size()];
-            entries[size()] = null;
         }
         return re;
     }
 
     @Override
     public void clear() {
-        for (SimpleEntry<K, V> item : entries) {
-            item = null;
-        }
+        entries = createArrayOfEntries(entries.length);
+        l = 0;
     }
 
     @Override
@@ -151,13 +148,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
 
     @Override
     public int size() {
-        int re = 0;
-        for (SimpleEntry<K, V> item : entries) {
-            if (item != null) {
-                re++;
-            }
-        }
-        return re;
+        return l;
     }
 
     @Override
