@@ -24,8 +24,8 @@ public class Experiment1ArrayMapRemove {
         List<Long> sizes = AnalysisUtils.range(0L, MAX_MAP_SIZE, STEP);
 
         PlotWindow.launch("Experiment 1", "Map Size", "Elapsed Time (ns)",
-                new LongUnaryOperator[]{this::f1, this::f2},
-                new String[]{"f1", "f2"}, sizes, 1000, .05);
+            new LongUnaryOperator[]{this::f1},
+            new String[]{"f1"}, sizes, 1000, .05);
     }
 
     protected AbstractIterableMap<Long, Long> createArrayMapOfSize(long mapSize) {
@@ -50,7 +50,6 @@ public class Experiment1ArrayMapRemove {
         AbstractIterableMap<Long, Long> map = createArrayMapOfSize(mapSize);
 
         long start = System.nanoTime();
-
         for (long i = mapSize - 1; i >= 0; i--) {
             map.remove(i);
         }

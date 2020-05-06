@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
     int l = 0;
+    private int capacity;
     /*
     Warning:
     DO NOT rename this `entries` field or change its type.
@@ -38,6 +39,7 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
 
     public ArrayMap(int initialCapacity) {
         this.entries = this.createArrayOfEntries(initialCapacity);
+        this.capacity = initialCapacity;
     }
 
     /**
@@ -82,12 +84,23 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
     public V put(K key, V value) {
         int i = 0;
         V re = null;
+        if (size() >= capacity) {
+            capacity *= 2;
+            arrayMapt(capacity);
+            int j = 0;
+            for (SimpleEntry<K, V> item : entries) {
+                entries1[j++] = item;
+            }
+            entries = entries1;
+        }
         for (SimpleEntry<K, V> item : entries) {
-            if (item != null && item.getKey() == null && key == null) {
-                re = item.getValue();
-                item.setValue(value);
-                i++;
-                return re;
+            if (item == null) {
+                if (item != null && item.getKey() == null && key == null) {
+                    re = item.getValue();
+                    item.setValue(value);
+                    i++;
+                    return re;
+                }
             }
             if (item != null && item.getKey() != null && item.getKey().equals(key)) {
                 re = item.getValue();
@@ -105,16 +118,6 @@ public class ArrayMap<K, V> extends AbstractIterableMap<K, V> {
                 }
                 i++;
             }
-        }
-        if (size() >= entries.length - 1) {
-            int j = 0;
-            arrayMapt(2 * entries.length);
-            for (SimpleEntry<K, V> item : entries) {
-                entries1[j++] = item;
-            }
-            entries = entries1;
-            entries[j] = new SimpleEntry<>(key, value);
-            l++;
         }
         return null;
     }

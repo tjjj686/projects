@@ -244,12 +244,10 @@ public class ArrayHeapMinPQTests extends BaseTest {
             assertThat(pq).isValid();
         }
     }
-
     @Nested
     @DisplayName("Add 10 Increasing Priority")
     class Add10Increasing {
         Integer[] correctOrdering = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
         ExtrinsicMinPQ<Integer> setUpMinPQ() {
             ExtrinsicMinPQ<Integer> pq = createMinPQ();
             pq.add(1, 1);
@@ -285,6 +283,66 @@ public class ArrayHeapMinPQTests extends BaseTest {
             List<Integer> output = removeAll(pq);
             assertThat(output).containsExactly(correctOrdering);
             assertThat(pq).isValid();
+        }
+    }
+
+    @Nested
+    @DisplayName("my test of chage priority")
+    class myTestOfChangePrority {
+        Integer[] correctOrdering = {1, 2, 3, 4, 6, 7, 8, 9, 10, 5};
+        Integer[] correctOrdering2 = {1, 5, 2, 3, 4, 6, 7, 8, 9, 10};
+
+        ExtrinsicMinPQ<Integer> setUpMinPQ() {
+            ExtrinsicMinPQ<Integer> pq = createMinPQ();
+            pq.add(1, 1);
+            pq.add(2, 2);
+            pq.add(3, 3);
+            pq.add(4, 4);
+            pq.add(5, 5);
+            pq.add(6, 6);
+            pq.add(7, 7);
+            pq.add(8, 8);
+            pq.add(9, 9);
+            pq.add(10, 10);
+            return pq;
+        }
+
+        @Test
+        void changePriority1() {
+            ExtrinsicMinPQ<Integer> pq = setUpMinPQ();
+            pq.changePriority(5, 11);
+            List<Integer> output = removeAll(pq);
+            assertThat(output).containsExactly(correctOrdering);
+            assertThat(pq).isValid();
+        }
+
+        @Test
+        void changePriority2() {
+            ExtrinsicMinPQ<Integer> pq = setUpMinPQ();
+            pq.changePriority(5, 1);
+            List<Integer> output = removeAll(pq);
+            assertThat(output).containsExactly(correctOrdering2);
+            assertThat(pq).isValid();
+        }
+    }
+
+    @Nested
+    @DisplayName("Add 10 Arbitrary Priority")
+    class testTime {
+        ExtrinsicMinPQ<Integer> setUpMinPQ() {
+            ExtrinsicMinPQ<Integer> pq = createMinPQ();
+            for (int i = 0; i < 10000; i++) {
+                pq.add(i, i);
+            }
+            return pq;
+        }
+
+        @Test
+        void addTime() {
+            long start = System.currentTimeMillis();
+            ExtrinsicMinPQ<Integer> pq = setUpMinPQ();
+            long end = System.currentTimeMillis();
+            System.out.println("Total time elapsed: " + (end - start) / 1000.0 + " seconds.");
         }
     }
 
