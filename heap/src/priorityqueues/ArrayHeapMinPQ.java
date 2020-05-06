@@ -151,28 +151,26 @@ public class ArrayHeapMinPQ<T extends Comparable<T>> implements ExtrinsicMinPQ<T
         if (!contains(item)) {
             throw new NoSuchElementException();
         }
-        for (int i = 1; i < size; i++) {
-            if (items.get(i).getItem() == item) {
-                items.get(i).setPriority(priority);
-                while (condSink1(i)) {
-                    int before = i;
-                    i = makeSink1(i);
-                    myMap.put(items.get(before).getItem(), i);
-                    myMap.put(items.get(i).getItem(), before);
-                }
-                while (condSink2(i)) {
-                    int before = i;
-                    i = makeSink2(i);
-                    myMap.put(items.get(before).getItem(), i);
-                    myMap.put(items.get(i).getItem(), before);
-                }
-                while (condSwap(i)) {
-                    int before = i;
-                    i = swap(i, i / 2);
-                    myMap.put(items.get(before).getItem(), i);
-                    myMap.put(items.get(i).getItem(), before);
-                }
-
+        if (contains((item))) {
+            int i = myMap.get(item);
+            items.get(i).setPriority(priority);
+            while (condSink1(i)) {
+                int before = i;
+                i = makeSink1(i);
+                myMap.put(items.get(before).getItem(), i);
+                myMap.put(items.get(i).getItem(), before);
+            }
+            while (condSink2(i)) {
+                int before = i;
+                i = makeSink2(i);
+                myMap.put(items.get(before).getItem(), i);
+                myMap.put(items.get(i).getItem(), before);
+            }
+            while (condSwap(i)) {
+                int before = i;
+                i = swap(i, i / 2);
+                myMap.put(items.get(before).getItem(), i);
+                myMap.put(items.get(i).getItem(), before);
             }
         }
     }
