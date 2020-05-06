@@ -53,8 +53,8 @@ public class ArrayHeapMinPQ<T extends Comparable<T>> implements ExtrinsicMinPQ<T
         while (condSwap(i)) {
             int before = i;
             i = swap(i, i / 2); //swap the children to parents.
-            myMap.put(items.get(before).getItem(), i);
-            myMap.put(items.get(i).getItem(), before);
+            myMap.put(items.get(before).getItem(), before);
+            myMap.put(items.get(i).getItem(), i);
         }
         myMap.put(item, i);
     }
@@ -134,14 +134,14 @@ public class ArrayHeapMinPQ<T extends Comparable<T>> implements ExtrinsicMinPQ<T
             while (condSink1(i)) {
                 int before = i;
                 i = makeSink1(i);     //i: after sink
-                myMap.put(items.get(before).getItem(), i);
-                myMap.put(items.get(i).getItem(), before);
+                myMap.put(items.get(before).getItem(), before);
+                myMap.put(items.get(i).getItem(), i);
             }
             while (condSink2(i)) {
                 int before = i;
                 i = makeSink2(i);
-                myMap.put(items.get(before).getItem(), i);
-                myMap.put(items.get(i).getItem(), before);
+                myMap.put(items.get(before).getItem(), before);
+                myMap.put(items.get(i).getItem(), i);
             }
         }
         return re;
@@ -157,20 +157,20 @@ public class ArrayHeapMinPQ<T extends Comparable<T>> implements ExtrinsicMinPQ<T
             while (condSink1(i)) {
                 int before = i;
                 i = makeSink1(i);
-                myMap.put(items.get(before).getItem(), i);
-                myMap.put(items.get(i).getItem(), before);
+                myMap.put(items.get(before).getItem(), before);
+                myMap.put(items.get(i).getItem(), i);
             }
             while (condSink2(i)) {
                 int before = i;
                 i = makeSink2(i);
-                myMap.put(items.get(before).getItem(), i);
-                myMap.put(items.get(i).getItem(), before);
+                myMap.put(items.get(before).getItem(), before);
+                myMap.put(items.get(i).getItem(), i);
             }
             while (condSwap(i)) {
                 int before = i;
                 i = swap(i, i / 2);
-                myMap.put(items.get(before).getItem(), i);
-                myMap.put(items.get(i).getItem(), before);
+                myMap.put(items.get(before).getItem(), before);
+                myMap.put(items.get(i).getItem(), i);
             }
         }
     }
