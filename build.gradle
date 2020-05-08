@@ -68,6 +68,12 @@ allprojects {
     repositories {
         // JCenter is a website containing a large collection of 3rd-party libraries.
         jcenter()
+        maven {
+            url 'https://jitpack.io'
+            content {
+                includeGroup 'com.github.ArlindNocaj'
+            }
+        }
     }
 
     // This section tells Gradle where we're putting our main code and our tests.
