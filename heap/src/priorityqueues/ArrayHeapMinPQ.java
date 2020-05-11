@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public class ArrayHeapMinPQ<T extends Comparable<T>> implements ExtrinsicMinPQ<T> {
+public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     // IMPORTANT: Do not rename these fields or change their visibility.
     // We access these during grading to test your code.
     static final int START_INDEX = 1;
