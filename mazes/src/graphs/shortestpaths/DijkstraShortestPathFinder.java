@@ -60,7 +60,6 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
     @Override
     public ShortestPath<V, E> findShortestPath(G graph, V start, V end) {
         boolean find = false;
-        // TODO: replace this with your code
         pq.add(start, 0);
         distToV.put(start, 0.0);
         discovered.add(start);
