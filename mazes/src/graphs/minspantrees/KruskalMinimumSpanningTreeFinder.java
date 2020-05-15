@@ -78,10 +78,7 @@ public class KruskalMinimumSpanningTreeFinder<G extends KruskalGraph<V, E>, V, E
                 }
             }
         }
-        if (edges.size() == 0 && !graph.allVertices().isEmpty()) {
-            return new MinimumSpanningTree.Failure<>();
-        }
-        if (count == re.size()) {
+        if (count == re.size() || edges.size() == 0 && !graph.allVertices().isEmpty()) {
             return new MinimumSpanningTree.Success<>(re);
         } else {
             return new MinimumSpanningTree.Failure<>();
