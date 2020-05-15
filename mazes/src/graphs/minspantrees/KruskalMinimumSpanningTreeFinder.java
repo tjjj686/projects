@@ -9,7 +9,9 @@ import priorityqueues.ExtrinsicMinPQ;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Computes minimum spanning trees using Kruskal's algorithm.
@@ -34,12 +36,16 @@ public class KruskalMinimumSpanningTreeFinder<G extends KruskalGraph<V, E>, V, E
     }
 
     private void addTo(ExtrinsicMinPQ<E> pq, List<E> edges, DisjointSets<V> disjointSets) {
+        Set<V> myset = new HashSet<>();
         for (int i = 0; i < edges.size(); i++) {
             E item = edges.get(i);
             double w = item.weight();
             pq.add(item, w);
-            disjointSets.makeSet(item.from());
-            disjointSets.makeSet(item.to());
+            myset.add(item.from());
+            myset.add(item.to());
+        }
+        for (V item : myset) {
+            disjointSets.makeSet(item);
         }
     }
 
@@ -55,7 +61,6 @@ public class KruskalMinimumSpanningTreeFinder<G extends KruskalGraph<V, E>, V, E
         List<E> re = new ArrayList<>();
         ExtrinsicMinPQ<E> pq = new DoubleMapMinPQ<E>();
         addTo(pq, edges, disjointSets);
-
         while (!pq.isEmpty()) {
             E item = pq.removeMin();
             if (disjointSets.union(item.from(), item.to())) {
@@ -72,6 +77,9 @@ public class KruskalMinimumSpanningTreeFinder<G extends KruskalGraph<V, E>, V, E
                     count++;
                 }
             }
+        }
+        if (edges.size() == 0 && count != 0) {
+            return new MinimumSpanningTree.Failure<>();
         }
         if (count == re.size()) {
             return new MinimumSpanningTree.Success<>(re);
