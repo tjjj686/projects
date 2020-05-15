@@ -1,11 +1,13 @@
 package mazes.logic.carvers;
 
 import graphs.EdgeWithData;
+import graphs.minspantrees.MinimumSpanningTree;
 import graphs.minspantrees.MinimumSpanningTreeFinder;
 import mazes.entities.Room;
 import mazes.entities.Wall;
 import mazes.logic.MazeGraph;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -31,9 +33,18 @@ public class KruskalMazeCarver extends MazeCarver {
 
     @Override
     protected Set<Wall> chooseWallsToRemove(Set<Wall> walls) {
-        // TODO: replace this with your code
+        Set<EdgeWithData<Room, Wall>> setOfEdge = new HashSet<EdgeWithData<Room, Wall>>();
+        Set<Wall> removed = new HashSet<Wall>();
         // Hint: you'll probably need to include something like the following:
         // this.minimumSpanningTreeFinder.findMinimumSpanningTree(new MazeGraph(edges));
-        throw new UnsupportedOperationException("Not implemented yet.");
+        for (Wall edge : walls) {
+            setOfEdge.add(new EdgeWithData<>(edge.getRoom1(), edge.getRoom2(), rand.nextDouble(), edge));
+        }
+        MinimumSpanningTree<Room, EdgeWithData<Room, Wall>> mst =
+            this.minimumSpanningTreeFinder.findMinimumSpanningTree(new MazeGraph(setOfEdge));
+        for (EdgeWithData<Room, Wall> item : mst.edges()) {
+            removed.add(item.data());
+        }
+        return removed;
     }
 }
