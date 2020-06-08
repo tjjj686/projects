@@ -1,0 +1,11 @@
+
+sourceSets.main.studentJava.files = [
+    'seamcarving/DualGradientEnergyFunction.java',
+    'seamcarving/DijkstraSeamFinder.java',
+]
+
+allprojects {
+    dependencies {
+        implementation project(':mazes')
+    }
+}
