@@ -3,6 +3,7 @@ package seamcarving;
 import graphs.Edge;
 import graphs.Graph;
 import graphs.shortestpaths.DijkstraShortestPathFinder;
+import graphs.shortestpaths.ShortestPath;
 import graphs.shortestpaths.ShortestPathFinder;
 
 import java.util.ArrayList;
@@ -16,8 +17,6 @@ import java.util.Objects;
 import java.util.Set;
 
 public class DijkstraSeamFinder implements SeamFinder {
-    // TODO: replace all 4 references to "Object" on the line below with whatever vertex type
-    //  you choose for your graph
     class MyVertex {
         private double energy;
         private int row;
@@ -47,7 +46,7 @@ public class DijkstraSeamFinder implements SeamFinder {
         }
     }
 
-    private class MyHorGraph implements Graph<MyVertex, Edge<MyVertex>> {
+    private final class MyHorGraph implements Graph<MyVertex, Edge<MyVertex>> {
         protected final Map<MyVertex, Set<Edge<MyVertex>>> adjacencyList;
 
         private MyHorGraph() {
@@ -57,12 +56,12 @@ public class DijkstraSeamFinder implements SeamFinder {
         public void buildMyHorGraph(MyVertex[][] myVertex, MyVertex start, MyVertex end) {
             for (int w = 0; w < myVertex[0].length; w++) {
                 for (int h = 0; h < myVertex.length; h++) {
-                    if (w != myVertex[0].length - 1) {
-                        adjacencyList.put(myVertex[h][w], findHorEdge(myVertex, w, h));
-                    } else {
+                    if (w == myVertex[0].length - 1) {
                         Set<Edge<MyVertex>> mySet = new HashSet();
                         mySet.add(new Edge(myVertex[h][w], end, end.energy));
                         adjacencyList.put(myVertex[h][w], mySet);
+                    } else {
+                        adjacencyList.put(myVertex[h][w], findHorEdge(myVertex, w, h));
                     }
                 }
             }
@@ -75,7 +74,6 @@ public class DijkstraSeamFinder implements SeamFinder {
             return Collections.unmodifiableSet(adjacencyList.getOrDefault(vertex, Set.of()));
         }
     }
-
     private final ShortestPathFinder<Graph<MyVertex, Edge<MyVertex>>, MyVertex, Edge<MyVertex>> pathFinder;
 
     public DijkstraSeamFinder() {
@@ -91,12 +89,12 @@ public class DijkstraSeamFinder implements SeamFinder {
     }
 
     private MyVertex[][] buildMyVertex(double[][] energies) {
-        MyVertex[][] re = new MyVertex[energies.length][energies[0].length];
+        MyVertex[][] re = new MyVertex[energies[0].length][energies.length];
         for (int w = 0; w < energies[0].length; w++) {
             for (int h = 0; h < energies.length; h++) {
-                re[h][w].energy = energies[h][w];
-                re[h][w].row = h;
-                re[h][w].col = w;
+                re[w][h] = new MyVertex(energies[h][w]);
+                re[w][h].row = w;
+                re[w][h].col = h;
             }
         }
         return re;
@@ -110,7 +108,7 @@ public class DijkstraSeamFinder implements SeamFinder {
         } else if (h == myVertex.length - 1) {
             mySet.add(new Edge(myVertex[h][w], myVertex[h][w + 1], myVertex[h][w + 1].energy));
             mySet.add(new Edge(myVertex[h][w], myVertex[h - 1][w + 1], myVertex[h - 1][w + 1].energy));
-        } else {
+        } else if (h + 1 < myVertex.length) {
             mySet.add(new Edge(myVertex[h][w], myVertex[h][w + 1], myVertex[h][w + 1].energy));
             mySet.add(new Edge(myVertex[h][w], myVertex[h - 1][w + 1], myVertex[h - 1][w + 1].energy));
             mySet.add(new Edge(myVertex[h][w], myVertex[h + 1][w + 1], myVertex[h + 1][w + 1].energy));
@@ -129,22 +127,38 @@ public class DijkstraSeamFinder implements SeamFinder {
     @Override
     public List<Integer> findHorizontalSeam(double[][] energies) {
         List<Integer> re = new ArrayList<>();
-        List<Edge<MyVertex>> shortestEdge = new ArrayList<>();
         //instantiating the graph implementation and choosing the start and end vertices
         MyHorGraph g = new MyHorGraph();
-        MyVertex start = new MyVertex(0);
-        MyVertex end = new MyVertex(0);
-        g.buildMyHorGraph(buildMyVertex(energies), start, end);
-        shortestEdge = pathFinder.findShortestPath(g, start, end).edges();
-        for (int i = 0; i < shortestEdge.size() - 1; i++) {
-            re.add(shortestEdge.get(0).to().row);
+        MyVertex start = new MyVertex(10000);
+        MyVertex end = new MyVertex(Math.random());
+        MyVertex[][] myVertex = buildMyVertex(energies);
+        g.buildMyHorGraph(myVertex, start, end);
+        ShortestPath<MyVertex, Edge<MyVertex>> path = pathFinder.findShortestPath(g, start, end);
+        //System.out.println(1);
+        System.out.println("h " + myVertex.length);
+        System.out.println("w " + myVertex[0].length);
+        //System.out.println(myVertex[0].length);
+        for (int i = 0; i < myVertex[0].length; i++) {
+            re.add(path.edges().get(i).to().row);
         }
+        //System.out.println(re);
         return re;
     }
 
     @Override
     public List<Integer> findVerticalSeam(double[][] energies) {
-        // TODO: replace this with your code
-        throw new UnsupportedOperationException("Not implemented yet.");
+        double[][] transposed = transpose(energies);
+        return findHorizontalSeam(transposed);
+
+    }
+
+    private double[][] transpose(double[][] energies) {
+        double[][] result = new double[energies[0].length][energies.length];
+        for (int w = 0; w < energies[0].length; w++) {
+            for (int h = 0; h < energies.length; h++) {
+                result[w][h] = energies[h][w];
+            }
+        }
+        return result;
     }
 }

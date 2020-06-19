@@ -86,8 +86,8 @@ public class DualGradientEnergyFunction implements EnergyFunction {
             gy = gyCent;
             by = byCent;
         }
-        return Math.sqrt(Math.pow(rx, 2) + Math.pow(gx, 2) + Math.pow(bx, 2) +
-            Math.pow(ry, 2) + Math.pow(gy, 2) + Math.pow(by, 2));
+        return Math.sqrt(rx * rx + gx * gx + bx * bx +
+            ry * ry + gy * gy + by * by);
 
     }
 }

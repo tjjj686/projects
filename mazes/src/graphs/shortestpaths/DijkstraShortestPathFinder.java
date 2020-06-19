@@ -93,12 +93,10 @@ public class DijkstraShortestPathFinder<G extends Graph<V, E>, V, E extends Base
                 find = true;
                 edge = new ArrayList<E>();
                 update(edge, end, start);
-                System.out.println(edge);
                 break;
             }
         }
         if (find) {
-            System.out.println(edge);
             return new ShortestPath.Success<>(edge);
         }
         return new ShortestPath.Failure<>();

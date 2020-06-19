@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import static seamcarving.Utils.Orientation.HORIZONTAL;
+import static seamcarving.Utils.Orientation.VERTICAL;
 import static seamcarving.demos.PictureUtils.loadPicture;
 
 /**
@@ -19,7 +20,7 @@ import static seamcarving.demos.PictureUtils.loadPicture;
  * Shows the sequence of seams being removed.
  */
 public class SeamCarverVisualizer {
-    protected static final String IMAGE_NAME = "HJoceanSmall.png";
+    protected static final String IMAGE_NAME = "chameleon.png";
     protected static final int NUM_PIXELS = 150;
     private static final Orientation ORIENTATION = HORIZONTAL;
     JFrame frame;
@@ -51,12 +52,16 @@ public class SeamCarverVisualizer {
 
     private void paintHorizontalSeam(Picture p, List<Integer> seam) {
         for (int i = 0; i < seam.size(); i++) {
+            //System.out.println(seam.get(i));
+            //System.out.println("im "+p.height());
             p.set(i, seam.get(i), new Color(255, 0, 0));
         }
     }
 
     private void paintVerticalSeam(Picture p, List<Integer> seam) {
         for (int i = 0; i < seam.size(); i++) {
+            System.out.println(seam.get(i));
+            System.out.println("im " + p.width());
             p.set(seam.get(i), i, new Color(255, 0, 0));
         }
     }
