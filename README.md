@@ -14,3 +14,9 @@ for more instructions.
 (In theory, it should be possible to complete our projects using the Gradle 
 support in any other IDE or by using Gradle without an IDE, but the course 
 staff may not be able to provide technical support if you do so.)
+
+
+
+demo for seam carving project:
+
+![seam carving](https://github.com/tjjj686/projects/blob/master/seamcarving/pic/gifhome_640x360_14s.gif)
